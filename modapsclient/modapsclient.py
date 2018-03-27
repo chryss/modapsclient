@@ -11,10 +11,13 @@ See http://ladsweb.nascom.nasa.gov/data/web_services.html**
 
 from __future__ import division, print_function, absolute_import
 from __future__ import unicode_literals
+from future import standard_library
+standard_library.install_aliases()
 
+from builtins import filter
+from builtins import object
 import sys
-import urllib
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import logging
 from xml.dom import minidom
 
@@ -101,13 +104,14 @@ class ModapsClient(object):
 
     def _rawresponse(self, url, data=None):
         if data:
-            querydata = urllib.urlencode(data)
-            request = urllib2.Request(url, querydata, headers=self.headers)
+            querydata = urllib.parse.urlencode(data).encode("utf-8")
+            request = urllib.request.Request(
+                url, querydata, headers=self.headers)
         else:
-            request = urllib2.Request(url, headers=self.headers)
+            request = urllib.request.Request(url, headers=self.headers)
         try:
-            response = urllib2.urlopen(request).read()
-        except urllib2.HTTPError as err:
+            response = urllib.request.urlopen(request).read()
+        except urllib.error.HTTPError as err:
             logging.critical("Error opening URL: %s" % err)
             logging.critical("URL is %s" % url)
             if data:
@@ -125,8 +129,8 @@ class ModapsClient(object):
         response = self._rawresponse(url, data=data)
         xmldoc = minidom.parseString(response)
         if unstabletags:
-            attr = xmldoc.documentElement.attributes.items()
-            pref = filter(_startswithax, [item[0] for item in attr])
+            attr = list(xmldoc.documentElement.attributes.items())
+            pref = list(filter(_startswithax, [item[0] for item in attr]))
             if not pref:
                 LOGGER.error(
                     "No valid namespace prefix found for request %s ." % url)

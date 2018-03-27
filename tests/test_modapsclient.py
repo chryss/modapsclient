@@ -8,7 +8,7 @@ Created by Chris Waigl on 2015-04-21.
 
 from __future__ import division, print_function, absolute_import
 from __future__ import unicode_literals
-from modapsclient import modapsclient
+import modapsclient
 import pytest
 from .modapsdummydata import modapsresponses
 
@@ -33,7 +33,7 @@ def mockmodaps():
 
 
 def test_modapsclient_patching():
-    assert len(modapsresponses.keys()) == 7
+    assert len(list(modapsresponses.keys())) == 7
 
 
 def test_modapsclient_creation(mockmodaps):
@@ -41,7 +41,7 @@ def test_modapsclient_creation(mockmodaps):
 
 
 def test_startswithax():
-    assert modapsclient._startswithax('xmlns:axlskdjf')
+    assert modapsclient.modapsclient._startswithax('xmlns:axlskdjf')
 
 
 # complete this
