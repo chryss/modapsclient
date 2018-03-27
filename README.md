@@ -52,3 +52,17 @@ Implements the methods from http://ladsweb.nascom.nasa.gov/data/api.html , excep
 | | `searchDatasets` |
 | x | `searchForFiles` |
 | x | `searchForFilesByName` |
+
+
+Caveats and limitations
+-----------------------
+
+This API is listed as "classic" by NASA EOSDIS, so it's unlikely it'll receive much
+attention in the future. Hardly anyone will use the "order" feature as the files are
+usually available on the public file server. For these two reasons, the unimplemented
+functionality is also unlikely to ever be implemented. 
+
+TODO
+----
+
+Add OPeNDAP client functionality. 
