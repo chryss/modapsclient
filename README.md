@@ -18,7 +18,7 @@ Usage:
 from pygaarst import modapsclient as m
 a = m.ModapsClient()
 b = a.[methodname](args)
-``` |
+```
 
 Implements the methods from http://ladsweb.nascom.nasa.gov/data/api.html , except for (currently) those related to OpenSearch (which don't appear to be working reliably server-side) and ordering (TBD). Implemented methods are marked with an x. 
 
