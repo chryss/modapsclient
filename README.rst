@@ -27,7 +27,7 @@ Usage:
 
 .. code:: python
 
-    from pygaarst import modapsclient as m
+    import modapsclient as m
     a = m.ModapsClient()
     b = a.[methodname](args)
 
