@@ -41,8 +41,6 @@ nosetests.xml
 
 # iPython
 .ipynb_checkpoints
-*.ipynb
-ipynb/*
 
 # documentation build directory
 doc/_build/
