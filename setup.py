@@ -1,17 +1,20 @@
-try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
+from setuptools import setup, find_packages
+
+version = '0.1.1'
+
+with open('README.rst', 'rU') as f:
+    long_description = f.read()
 
 setup(
     name='modapsclient',
-    version='0.1',
+    version=version,
     description='A client for the NASA MODAPS web service',
+    long_description=long_description,
     author='Chris Waigl',
     author_email='chris.waigl@gmail.com',
     url='https://github.com/chryss/modapsclient',
     license='MIT',
-    packages=['modapsclient'],
+    packages=find_packages(exclude=['tests']),
     install_requires=[
         'future',
     ],

@@ -3,9 +3,16 @@ modapsclient
 
 Python RESTful client for NASA’s MODIS Adaptive Processing System
 (MODAPS) data archive at the Level-1 and Atmosphere Archive &
-Distribution System (LAADS) Distributed Active Archive Center (DAAC)
+Distribution System (LAADS) Distributed Active Archive Center (DAAC).
 
 MIT License.
+
+Installation
+------------
+
+.. code:: python
+
+	pip install modapsclient
 
 pygaarst.modapsclient
 ---------------------
@@ -98,8 +105,9 @@ feature as the files are usually available on the public file server.
 For these two reasons, the unimplemented functionality is also unlikely
 to ever be implemented.
 
-From experience, products listed via ``listProducts``  are not actually
-necessarily available.
+From experience, products listed via ``listProducts``  are not 
+necessarily in actual fact available in the NASA EOSDIS LAADS archive. 
+In this case, you may receive an error when searching for files. 
 
 The MODAPS web service has the tendency to return a 500 Internal Server
 Error for *any* error, including unsupported values for query string variables.
