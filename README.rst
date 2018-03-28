@@ -98,6 +98,17 @@ feature as the files are usually available on the public file server.
 For these two reasons, the unimplemented functionality is also unlikely
 to ever be implemented.
 
+From experience, products listed via ``listProducts``  are not actually
+necessarily available.
+
+The MODAPS web service has the tendency to return a 500 Internal Server
+Error for *any* error, including unsupported values for query string variables.
+
+Further docuementation
+----------------------
+
+See the ``ipynb/`` folder for Jupyter Notebooks.
+
 TODO
 ----
 
