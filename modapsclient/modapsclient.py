@@ -25,6 +25,10 @@ logging.basicConfig(level=logging.DEBUG)
 LOGGER = logging.getLogger('pygaarst.modapsclient')
 
 MODAPSBASEURL = (
+    u"https://modwebsrv.modaps.eosdis.nasa.gov/"
+    u"axis2/services/MODAPSservices"
+)
+MODAPSBASEURL_noTLS = (
     u"http://modwebsrv.modaps.eosdis.nasa.gov/"
     u"axis2/services/MODAPSservices"
 )
@@ -116,17 +120,28 @@ class ModapsClient(object):
             logging.critical("URL is %s" % url)
             if data:
                 logging.critical("Query string is %s" % querydata)
-            sys.exit(1)
+            raise
         return response
 
-    def _makeurl(self, path):
-        return self.baseurl + path
+    def _makeurl(self, path, TLS=True):
+        if TLS:
+            return self.baseurl + path
+        return MODAPSBASEURL_noTLS + path
 
     def _parsedresponse(self, path, argdict, parserfun,
                         data=None, unstabletags=False):
         """Returns response based on request and parser function"""
-        url = self._makeurl(path)
-        response = self._rawresponse(url, data=data)
+        url = self._makeurl(path, TLS=True)
+        try:
+            response = self._rawresponse(url, data=data)
+        except urllib.error.HTTPError:
+            try:
+                url = self._makeurl(path, TLS=False)
+                response = self._rawresponse(url, data=data)
+            except urllib.error.HTTPError:
+                logging.critical(
+                    "Tried with and without TLS. Web service unavailable.")
+                raise
         xmldoc = minidom.parseString(response)
         if unstabletags:
             attr = list(xmldoc.documentElement.attributes.items())
@@ -148,7 +163,9 @@ class ModapsClient(object):
 
     def getAllOrders(self, email):
         """All orders for an email address"""
-        pass
+        raise NotImplementedError(
+            "Method {} not implemented. Probably won't be.".format(
+                'getAllOrders'))
 
     def getBands(self, product):
         """Available bands for a product"""
@@ -262,11 +279,15 @@ class ModapsClient(object):
 
     def getOrderStatus(self, OrderID):
         """Order status for an order ID. TODO: implement"""
-        pass
+        raise NotImplementedError(
+            "Method {} not implemented. Probably won't be.".format(
+                'getOrderStatus'))
 
     def getOrderUrl(self, OrderID):
         """Order URL(?) for order ID. TODO: implement"""
-        pass
+        raise NotImplementedError(
+            "Method {} not implemented. Probably won't be.".format(
+                'getOrderUrl'))
 
     def getPostProcessingTypes(self, products):
         '''Products: comma-concatenated string of valid product labels'''
@@ -358,13 +379,15 @@ class ModapsClient(object):
 
     def orderFiles(self, FileIDs):
         """Submits an order. TODO: implement"""
-        pass
+        raise NotImplementedError(
+            "Method {} not implemented. Probably won't be.".format(
+                'orderFiles'))
 
     def searchForFiles(
             self, products, startTime, endTime,
             north, south, east, west,
             coordsOrTiles=u'coords',
-            dayNightBoth=u'DNB', collection=5):
+            dayNightBoth=u'DNB', collection=6):
         """Submits a search based on product, geography and time"""
         path = u'/searchForFiles'
         parser = _parselist

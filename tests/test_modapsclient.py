@@ -8,6 +8,7 @@ Created by Chris Waigl on 2015-04-21.
 
 from __future__ import division, print_function, absolute_import
 from __future__ import unicode_literals
+from builtins import str
 import modapsclient
 import pytest
 from .modapsdummydata import modapsresponses
@@ -20,7 +21,7 @@ def mockedresponse(url, data=None):
         return modapsresponses['invalid']
 
 
-def fakeurl(fakepath):
+def fakeurl(fakepath, TLS=True):
     return fakepath
 
 
@@ -29,6 +30,12 @@ def mockmodaps():
     a = modapsclient.ModapsClient()
     a._makeurl = fakeurl
     a._rawresponse = mockedresponse
+    return a
+
+
+@pytest.fixture(scope='module')
+def realmodaps():
+    a = modapsclient.ModapsClient()
     return a
 
 
@@ -63,3 +70,8 @@ def test_satelliteInstruments(mockmodaps):
         u'NPP': u'Suomi NPP VIIRS',
         u'PM1M': u'Aqua MODIS'
     }
+
+
+def test_realrequest(realmodaps):
+    satinst = realmodaps.listSatelliteInstruments()
+    assert isinstance(list(satinst.keys())[0], str)
